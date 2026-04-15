@@ -2,16 +2,30 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float bulletSpeed = 8f;
     public float lifeTime = 2f;
+    public int damage = 1;
 
     void Start()
     {
         Destroy(gameObject, lifeTime);
     }
 
-    void Update()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        transform.Translate(Vector2.right * bulletSpeed * Time.deltaTime);
+        if (other.CompareTag("Enemy"))
+        {
+            CreatureEnemy enemy = other.GetComponent<CreatureEnemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+
+            Destroy(gameObject);
+        }
+
+        if (other.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
